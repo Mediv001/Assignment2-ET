@@ -3,6 +3,7 @@ package com.example.english.assignment2;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 
 /**
  * Created by english on 30/03/2016.
@@ -10,7 +11,7 @@ import android.graphics.Rect;
 public class Cells {
     int nb;
     boolean cover;
-    int[] xy = new int[4];
+    Rect rectangle;
     Paint color;
 
     public Paint getColor() {
@@ -21,13 +22,10 @@ public class Cells {
         this.color = color;
     }
 
-    public int[] getXy() {
-        return xy;
+    public Rect getXy() {
+        return rectangle;
     }
 
-    public void setXy(int[] xy) {
-        this.xy = xy;
-    }
 
     public boolean isCover() {
         return cover;
@@ -45,14 +43,14 @@ public class Cells {
         this.nb = nb;
     }
 
-    public Cells(int nb, boolean cover, int[] a, Paint color){
+    public Cells(int nb, boolean cover, Rect a, Paint color){
         this.cover = cover;
         this.nb = nb;
-        xy = a;
+        rectangle = a;
         this.color = color;
     }
 
     public void Draw(Canvas canvas){
-        canvas.drawRect(xy[0],xy[1],xy[2],xy[3], this.getColor());
+        canvas.drawRect(rectangle.left, rectangle.top, rectangle.right, rectangle.bottom, getColor());
     }
 }
