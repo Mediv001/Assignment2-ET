@@ -1,6 +1,7 @@
 package com.example.english.assignment2;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.Log;
@@ -13,6 +14,15 @@ public class Cells {
     boolean cover;
     Rect rectangle;
     Paint color;
+    boolean mines;
+
+    public boolean isMines() {
+        return mines;
+    }
+
+    public void setMines(boolean mines) {
+        this.mines = mines;
+    }
 
     public Paint getColor() {
         return color;
@@ -43,14 +53,23 @@ public class Cells {
         this.nb = nb;
     }
 
-    public Cells(int nb, boolean cover, Rect a, Paint color){
+    public Cells(int nb, boolean cover, Rect a, Paint colour){
         this.cover = cover;
         this.nb = nb;
         rectangle = a;
-        this.color = color;
+        color = colour;
+        mines = false;
+        cover = true;
     }
 
     public void Draw(Canvas canvas){
         canvas.drawRect(rectangle.left, rectangle.top, rectangle.right, rectangle.bottom, getColor());
+        if(!cover){
+            Paint text = new Paint();
+            text.setTextAlign(Paint.Align.CENTER);
+            text.setTextSize(text.getTextSize() * 2);
+            text.setColor(Color.BLACK);
+            canvas.drawText("M",(getXy().left+getXy().right)/2, (getXy().top+getXy().bottom)/2, text);
+        }
     }
 }
