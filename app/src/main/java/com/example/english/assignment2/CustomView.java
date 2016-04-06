@@ -9,8 +9,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
-import java.lang.reflect.Array;
-import java.util.Arrays;
+
 import java.util.Random;
 
 /**
@@ -18,7 +17,7 @@ import java.util.Random;
  */
 public class CustomView extends View {
     private Paint black;
-    private Paint grey;
+    private Paint grey;//uncover
     private Cells[] touchx;// x position of each touch
     private Rect[] listcase;
     private boolean touch;// do we have at least on touch
@@ -77,7 +76,7 @@ public class CustomView extends View {
                 right = 55;
                 j = 0;
             }
-            touchx[i] = new Cells(0, true, new Rect(left, top, right, bot), black);
+            touchx[i] = new Cells(true, new Rect(left, top, right, bot), black);
             left += 60;
             right += 60;
             listcase[i] = touchx[i].getXy();
@@ -87,13 +86,14 @@ public class CustomView extends View {
         }
     }
 
+    @Override
     public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
         for (int i = 0; i < 100; i++) {
-                touchx[i].Draw(canvas);
+            touchx[i].Draw(canvas);
         }
     }
 
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
         float eventX = event.getX();
         float eventY = event.getY();
@@ -102,15 +102,13 @@ public class CustomView extends View {
             touchx[yolo].setCover(false);
             if(touchx[yolo].isMines()){
                 touchx[yolo].setColor(red);
-                touchx[yolo].setCover(false);
             }
             else {
                 touchx[yolo].setColor(grey);
-                touchx[yolo].setCover(true);
             }
         }
         invalidate();
-        return super.onTouchEvent(event);
+        return true;
     }
 
     public int search(float x, float y){
@@ -127,6 +125,34 @@ public class CustomView extends View {
             addmine(rand);
         }else{
             touchx[mine].setMines(true);
+            addnb(mine);
+        }
+    }
+
+    public void addnb(int cell){
+        if((cell+1) % 10 != 0){ //droite
+            touchx[cell+1].setNb(touchx[cell + 1].getNb() + 1);
+            if(cell > 9){ //haut droit
+                touchx[cell-9].setNb(touchx[cell-9].getNb()+1);
+            }
+            if(cell < 90){ //bas droit
+                touchx[cell+11].setNb(touchx[cell+11].getNb()+1);
+            }
+        }
+        if(cell > 9){ //haut
+            touchx[cell-10].setNb(touchx[cell-10].getNb()+1);
+        }
+        if(cell < 90){ //bas
+            touchx[cell+10].setNb(touchx[cell+10].getNb()+1);
+        }
+        if(cell % 10 != 0){ //gauche
+            touchx[cell-1].setNb(touchx[cell-1].getNb()+1);
+            if(cell > 9){ //haut gauche
+                touchx[cell-11].setNb(touchx[cell-11].getNb()+1);
+            }
+            if(cell < 90){ //bas gauche
+                touchx[cell+9].setNb(touchx[cell+9].getNb()+1);
+            }
         }
     }
 }
