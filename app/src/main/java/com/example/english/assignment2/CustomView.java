@@ -16,11 +16,11 @@ import java.util.Random;
  * Created by english on 30/03/2016.
  */
 public class CustomView extends View {
+    private boolean loose;
     private Paint black;
     private Paint grey;//uncover
     private Cells[] touchx;// x position of each touch
     private Rect[] listcase;
-    private boolean touch;// do we have at least on touch
     private Paint red;
 
     public CustomView(Context c) {
@@ -84,6 +84,8 @@ public class CustomView extends View {
         for(int i = 0; i < 20; i++) {
             addmine(rand);
         }
+
+        loose = false;
     }
 
     @Override
@@ -95,19 +97,21 @@ public class CustomView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        float eventX = event.getX();
-        float eventY = event.getY();
-        int yolo = search(eventX, eventY);
-        if(yolo != -1){
-            touchx[yolo].setCover(false);
-            if(touchx[yolo].isMines()){
-                touchx[yolo].setColor(red);
+        if(!loose) {
+            float eventX = event.getX();
+            float eventY = event.getY();
+            int yolo = search(eventX, eventY);
+            if (yolo != -1) {
+                touchx[yolo].setCover(false);
+                if (touchx[yolo].isMines()) {
+                    touchx[yolo].setColor(red);
+                    loose = true;
+                } else {
+                    touchx[yolo].setColor(grey);
+                }
             }
-            else {
-                touchx[yolo].setColor(grey);
-            }
+            invalidate();
         }
-        invalidate();
         return true;
     }
 
@@ -146,7 +150,7 @@ public class CustomView extends View {
             touchx[cell+10].setNb(touchx[cell+10].getNb()+1);
         }
         if(cell % 10 != 0){ //gauche
-            touchx[cell-1].setNb(touchx[cell-1].getNb()+1);
+            touchx[cell-1].setNb(touchx[cell - 1].getNb() + 1);
             if(cell > 9){ //haut gauche
                 touchx[cell-11].setNb(touchx[cell-11].getNb()+1);
             }
@@ -154,5 +158,11 @@ public class CustomView extends View {
                 touchx[cell+9].setNb(touchx[cell+9].getNb()+1);
             }
         }
+    }
+
+    public boolean reset(){
+        this.invalidate();
+        init();
+        return true;
     }
 }
