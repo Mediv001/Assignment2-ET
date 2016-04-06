@@ -15,6 +15,16 @@ public class Cells {
     Paint color;
     boolean mines;
 
+    public boolean isMarked() {
+        return marked;
+    }
+
+    public void setMarked(boolean marked) {
+        this.marked = marked;
+    }
+
+    boolean marked;
+
     public boolean isMines() {
         return mines;
     }
@@ -58,6 +68,7 @@ public class Cells {
         rectangle = a;
         color = colour;
         setMines(false);
+        setMarked(false);
     }
 
     public void Draw(Canvas canvas){

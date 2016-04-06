@@ -16,19 +16,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/reset"
-        android:layout_toEndOf="@+id/tx1"/>
+        android:layout_marginTop="400dp"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/button2"
-        android:layout_toEndOf="@+id/reset"/>
+        android:layout_marginTop="400dp"
+        android:layout_marginLeft="200dp"/>
 
     <TextView
-        android:text="mines again"
+        android:text="mines unmarked : 20"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@+id/button2"
+        android:layout_marginLeft="200dp"
         android:id="@+id/tx2"/>
 
     <com.example.english.assignment2.CustomView
