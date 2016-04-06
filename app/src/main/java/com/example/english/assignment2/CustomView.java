@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -112,30 +111,34 @@ public class CustomView extends View {
             float eventY = event.getY();
             int yolo = search(eventX, eventY);
             switch (event.getAction()) {
-                case MotionEvent.ACTION_UP :
+                case MotionEvent.ACTION_UP:
                     if (yolo != -1) {
-                        if (!marking) {
-                            touchx[yolo].setCover(false);
-                            if (touchx[yolo].isMines()) {
-                                touchx[yolo].setColor(red);
-                                loose = true;
+                        if (touchx[yolo].isCover()) {
+                            if (!marking) {
+                                if (!touchx[yolo].isMarked()) {
+                                    touchx[yolo].setCover(false);
+                                    if (touchx[yolo].isMines()) {
+                                        touchx[yolo].setColor(red);
+                                        loose = true;
+                                    } else {
+                                        touchx[yolo].setColor(grey);
+                                    }
+                                }
                             } else {
-                                touchx[yolo].setColor(grey);
+                                if (touchx[yolo].isMarked()) {
+                                    touchx[yolo].setColor(black);
+                                    touchx[yolo].setMarked(false);
+                                    actualizenumber('+');
+                                } else {
+                                    touchx[yolo].setColor(yellow);
+                                    touchx[yolo].setMarked(true);
+                                    actualizenumber('-');
+                                }
+                                tx.setText("mines unmarked : " + number);
                             }
-                        } else {
-                            if (touchx[yolo].isMarked()) {
-                                touchx[yolo].setColor(black);
-                                touchx[yolo].setMarked(false);
-                                actualizenumber('+');
-                            } else {
-                                touchx[yolo].setColor(yellow);
-                                touchx[yolo].setMarked(true);
-                                actualizenumber('-');
-                            }
-                            tx.setText("mines unmarked : " + number);
                         }
+                        break;
                     }
-                    break;
             }
             invalidate();
         }
@@ -193,6 +196,7 @@ public class CustomView extends View {
 
     public boolean reset(){
         this.invalidate();
+        tx.setText("mines unmarked : 20");
         init();
         return true;
     }
